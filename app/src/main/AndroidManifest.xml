@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.gnews">
+    package="com.gnews">
 
     <application
-        android:name=".App"
+        android:name="com.gnews.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApplicationasas">
+        android:theme="@style/Theme.GNews">
         <activity
-            android:name="com.example.gnews.ui.main.MainActivity"
+            android:name="com.gnews.ui.main.MainActivity"
             android:exported="true"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/Theme.GNews.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

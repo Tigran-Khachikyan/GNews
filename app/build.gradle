@@ -9,7 +9,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.gnews"
+        applicationId "com.gnews"
         minSdk 21
         targetSdk 32
         versionCode 1
@@ -28,12 +28,12 @@ android {
     flavorDimensions("environment")
     productFlavors {
         dev {
-            buildConfigField "String", "BASE_URL", '"https://energy-dev.bsl.dev/api/v1/"'
+            buildConfigField "String", "BASE_URL", '"https://gnews.io/api/v4/"'
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
         }
         prod {
-            buildConfigField "String", "BASE_URL", '"https://energy-dev.bsl.dev/api/v1/"'
+            buildConfigField "String", "BASE_URL", '"https://gnews.io/api/v4/"'
             applicationIdSuffix ".prod"
         }
     }
@@ -90,7 +90,4 @@ dependencies {
 
     // Logger
     implementation 'com.jakewharton.timber:timber:4.7.1'
-
-    implementation "androidx.core:core-ktx:1.7.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
