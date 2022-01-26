@@ -2,6 +2,7 @@ package com.gnews.ui.main
 
 import android.os.Bundle
 import android.widget.ProgressBar
+import android.widget.Toolbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -26,12 +27,11 @@ class MainActivity : BaseActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_search, R.id.nav_favourite
+                R.id.nav_home, R.id.nav_search, R.id.nav_favourite, R.id.nav_details
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
             handleBottomNavViewVisibility(destination.id)
         }
@@ -39,5 +39,8 @@ class MainActivity : BaseActivity() {
 
     private fun handleBottomNavViewVisibility(id: Int) {
         binding.navView.visibleOrGone(id != R.id.nav_details)
+        actionBar?.apply {
+            if (id != R.id.nav_details) show() else hide()
+        }
     }
 }

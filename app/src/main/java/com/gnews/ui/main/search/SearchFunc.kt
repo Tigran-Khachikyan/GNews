@@ -1,11 +1,15 @@
 package com.gnews.ui.main.search
 
 import com.gnews.data.network.Request
+import com.gnews.domain.models.Article
 import com.gnews.ui.BaseEffect
 import com.gnews.ui.BaseEvent
 import com.gnews.ui.BaseState
 
-class State : BaseState()
+data class State(
+    var articles: List<Article> = listOf(),
+    var searchQuery: String = ""
+) : BaseState()
 
 sealed class Effect : BaseEffect() {
     sealed class NavigateTo : Effect()
@@ -15,4 +19,6 @@ sealed class Effect : BaseEffect() {
     }
 }
 
-sealed class Event : BaseEvent()
+sealed class Event : BaseEvent() {
+    data class Search(val data: String) : Event()
+}
