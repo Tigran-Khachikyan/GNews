@@ -9,7 +9,11 @@
         android:id="@+id/nav_home"
         android:name="com.gnews.ui.main.home.HomeFragment"
         android:label="@string/home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_details"
+            app:destination="@id/nav_details" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_search"
@@ -21,6 +25,19 @@
         android:id="@+id/nav_favourite"
         android:name="com.gnews.ui.main.favourite.FavouriteFragment"
         android:label="@string/favourite"
-        tools:layout="@layout/fragment_favourite" />
+        tools:layout="@layout/fragment_favourite" >
+        <action
+            android:id="@+id/action_nav_favourite_to_nav_details"
+            app:destination="@id/nav_details" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_details"
+        android:name="com.gnews.ui.main.details.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="article"
+            app:argType="com.gnews.domain.models.Article" />
+    </fragment>
 
 </navigation>

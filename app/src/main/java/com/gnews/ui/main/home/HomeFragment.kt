@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.gnews.databinding.FragmentHomeBinding
 import com.gnews.ui.BaseMviFragment
+import com.gnews.ui.main.favourite.FavouriteFragmentDirections
 import com.gnews.ui.main.home.Event.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -35,10 +37,10 @@ class HomeFragment : BaseMviFragment<State, Effect, Event, HomeViewModel>() {
             recyclerArticles.apply {
                 setHasFixedSize(true)
                 articleAdapter = ArticleAdapter(
+                    onlyCached = false,
                     onViewContent = { title -> viewModel.process(ViewDetails(title)) },
-                    onFavouriteMarkChanged = { title, selected ->
-                        viewModel.process(MarkAsFavourite(title, selected))
-                    }
+                    onRemoveArticle = { title -> viewModel.process(RemoveFromFavourites(title)) },
+                    onSaveArticle = { title -> viewModel.process(MarkAsFavourite(title)) },
                 )
                 adapter = articleAdapter
             }
@@ -52,5 +54,12 @@ class HomeFragment : BaseMviFragment<State, Effect, Event, HomeViewModel>() {
     }
 
     override fun renderViewEffect(effect: Effect) {
+        when (effect) {
+            is Effect.NavigateTo.Details -> {
+                findNavController().navigate(
+                    HomeFragmentDirections.actionNavHomeToNavDetails(effect.article)
+                )
+            }
+        }
     }
 }

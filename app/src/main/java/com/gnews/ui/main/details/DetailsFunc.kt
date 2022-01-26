@@ -1,4 +1,4 @@
-package com.gnews.ui.main.favourite
+package com.gnews.ui.main.details
 
 import com.gnews.data.network.Request
 import com.gnews.domain.models.Article
@@ -6,15 +6,10 @@ import com.gnews.ui.BaseEffect
 import com.gnews.ui.BaseEvent
 import com.gnews.ui.BaseState
 
-data class State(
-    var savedArticled: List<Article> = listOf()
-) : BaseState()
+data class State(var article: Article? = null) : BaseState()
 
 sealed class Effect : BaseEffect() {
-    sealed class NavigateTo : Effect() {
-        data class Details(val article: Article) : NavigateTo()
-    }
-
+    sealed class NavigateTo : Effect()
     data class ShowError(val reason: Request.Error) : Effect() {
         override val error: Request.Error
             get() = reason
@@ -22,6 +17,5 @@ sealed class Effect : BaseEffect() {
 }
 
 sealed class Event : BaseEvent() {
-    data class ViewDetails(val title: String) : Event()
-    data class Remove(val title: String) : Event()
+    data class InitScreen(val article: Article) : Event()
 }

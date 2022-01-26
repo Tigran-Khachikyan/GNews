@@ -5,8 +5,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.gnews.R
 import com.gnews.databinding.ListItemArticleBinding
@@ -16,8 +14,10 @@ import com.gnews.utils.setOnDebouncedClickListener
 import com.squareup.picasso.Picasso
 
 class ArticleAdapter(
+    private val onlyCached: Boolean,
     private val onViewContent: (String) -> Unit,
-    private val onFavouriteMarkChanged: (String, Boolean) -> Unit
+    private val onRemoveArticle: (String) -> Unit,
+    private val onSaveArticle: ((String) -> Unit)? = null
 ) :
     RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 
@@ -34,21 +34,25 @@ class ArticleAdapter(
                 Picasso.get()
                     .load(item.image)
                     .centerCrop(Gravity.TOP)
-                    .resize(105.px, 105.px)
+                    .resize(60.px, 60.px)
                     .error(icPlaceholderRes)
                     .placeholder(icPlaceholderRes)
                     .into(ivPicture)
                 icFavourite.run {
-                    val iconRes = if (item.isFavourite) {
-                        R.drawable.ic_favorite_24
-                    } else {
-                        R.drawable.ic_favorite_inactive_24
+                    val iconRes = when {
+                        onlyCached -> R.drawable.ic_close_24
+                        item.isFavourite -> R.drawable.ic_favorite_24
+                        else -> R.drawable.ic_favorite_inactive_24
                     }
                     setImageResource(iconRes)
                     setOnDebouncedClickListener {
                         articles[layoutPosition].run {
                             updatedPosition = layoutPosition
-                            onFavouriteMarkChanged.invoke(title, !isFavourite)
+                            if (onlyCached || isFavourite) {
+                                onRemoveArticle.invoke(title)
+                            } else {
+                                onSaveArticle?.invoke(title)
+                            }
                         }
                     }
                 }
@@ -71,7 +75,11 @@ class ArticleAdapter(
     fun setListItems(articles: List<Article>) {
         this.articles = articles
         updatedPosition?.let {
-            notifyItemChanged(it)
+            if (onlyCached) {
+                notifyItemRemoved(it)
+            } else {
+                notifyItemChanged(it)
+            }
         } ?: notifyDataSetChanged()
     }
 

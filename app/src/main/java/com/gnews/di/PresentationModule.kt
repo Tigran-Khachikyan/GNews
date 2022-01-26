@@ -1,5 +1,6 @@
 package com.gnews.di
 
+import com.gnews.ui.main.details.DetailsViewModel
 import com.gnews.ui.main.favourite.FavouriteViewModel
 import com.gnews.ui.main.home.HomeViewModel
 import com.gnews.ui.main.search.SearchViewModel
@@ -10,5 +11,6 @@ import org.koin.dsl.module
 val presentationModule = module {
     viewModel { HomeViewModel(application = androidApplication(), interactor = get()) }
     viewModel { SearchViewModel(application = androidApplication()) }
-    viewModel { FavouriteViewModel(application = androidApplication()) }
+    viewModel { DetailsViewModel(application = androidApplication()) }
+    viewModel { FavouriteViewModel(application = androidApplication(), interactor = get()) }
 }

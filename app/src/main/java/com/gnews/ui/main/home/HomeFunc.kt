@@ -17,7 +17,10 @@ data class State(
 }
 
 sealed class Effect : BaseEffect() {
-    sealed class NavigateTo : Effect()
+    sealed class NavigateTo : Effect() {
+        data class Details(val article: Article) : NavigateTo()
+    }
+
     data class ShowError(val reason: Request.Error) : Effect() {
         override val error: Request.Error
             get() = reason
@@ -25,7 +28,7 @@ sealed class Effect : BaseEffect() {
 }
 
 sealed class Event : BaseEvent() {
-    object Update : Event()
     data class ViewDetails(val title: String) : Event()
-    data class MarkAsFavourite(val title: String, val isSelected: Boolean) : Event()
+    data class MarkAsFavourite(val title: String) : Event()
+    data class RemoveFromFavourites(val title: String) : Event()
 }

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primary_active">#FF0000</color>
     <color name="secondary_inactive">#E68F8F</color>
+    <color name="info">#8A6666</color>
 </resources>

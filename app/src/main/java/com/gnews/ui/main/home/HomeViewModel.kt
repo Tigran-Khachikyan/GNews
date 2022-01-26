@@ -6,12 +6,12 @@ import com.gnews.data.network.Request
 import com.gnews.domain.interactors.ArticlesInteractor
 import com.gnews.ui.BaseMviViewModel
 import com.gnews.ui.ScreenStatus
+import com.gnews.ui.main.home.Effect.*
 import com.gnews.ui.main.home.Event.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class HomeViewModel(
     application: Application,
@@ -28,15 +28,13 @@ class HomeViewModel(
     override fun process(event: Event) {
         super.process(event)
         when (event) {
-            is MarkAsFavourite -> {
-                if (event.isSelected) {
-                    saveArticle(event.title)
-                } else {
-                    deleteArticleFromCache(event.title)
+            is RemoveFromFavourites -> deleteArticleFromCache(event.title)
+            is MarkAsFavourite -> saveArticle(event.title)
+            is ViewDetails -> {
+                state.articles.find { it.title == event.title }?.let {
+                    viewEffect = NavigateTo.Details(it)
                 }
             }
-            is ViewDetails -> {}
-            is Update -> fetchArticles()
         }
     }
 

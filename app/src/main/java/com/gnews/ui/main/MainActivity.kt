@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.gnews.R
 import com.gnews.databinding.ActivityMainBinding
 import com.gnews.ui.BaseActivity
+import com.gnews.utils.visibleOrGone
 
 class MainActivity : BaseActivity() {
 
@@ -30,5 +31,13 @@ class MainActivity : BaseActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            handleBottomNavViewVisibility(destination.id)
+        }
+    }
+
+    private fun handleBottomNavViewVisibility(id: Int) {
+        binding.navView.visibleOrGone(id != R.id.nav_details)
     }
 }
