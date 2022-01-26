@@ -29,11 +29,13 @@ android {
     productFlavors {
         dev {
             buildConfigField "String", "BASE_URL", '"https://gnews.io/api/v4/"'
+            buildConfigField "String", "API_KEY", '"d44107b8b2a85343234f47ced438d373"'
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
         }
         prod {
             buildConfigField "String", "BASE_URL", '"https://gnews.io/api/v4/"'
+            buildConfigField "String", "API_KEY", '"d44107b8b2a85343234f47ced438d373"'
             applicationIdSuffix ".prod"
         }
     }
