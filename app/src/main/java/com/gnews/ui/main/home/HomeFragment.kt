@@ -36,7 +36,9 @@ class HomeFragment : BaseMviFragment<State, Effect, Event, HomeViewModel>() {
                 setHasFixedSize(true)
                 articleAdapter = ArticleAdapter(
                     onViewContent = { title -> viewModel.process(ViewDetails(title)) },
-                    onMarkAsFavourite = { title -> viewModel.process(MarkAsFavourite(title)) }
+                    onFavouriteMarkChanged = { title, selected ->
+                        viewModel.process(MarkAsFavourite(title, selected))
+                    }
                 )
                 adapter = articleAdapter
             }

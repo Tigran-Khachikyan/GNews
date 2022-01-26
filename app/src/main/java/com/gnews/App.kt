@@ -2,10 +2,7 @@ package com.gnews
 
 import android.app.Application
 import com.gnews.data.network.ApiProvider
-import com.gnews.di.domainModule
-import com.gnews.di.networkModule
-import com.gnews.di.presentationModule
-import com.gnews.di.repositoriesModule
+import com.gnews.di.*
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -29,6 +26,7 @@ class App : Application() {
             modules(
                 listOf(
                     networkModule,
+                    dbModule,
                     domainModule,
                     repositoriesModule,
                     presentationModule

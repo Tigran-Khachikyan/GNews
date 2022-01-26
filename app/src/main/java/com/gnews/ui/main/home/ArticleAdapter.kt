@@ -1,5 +1,6 @@
 package com.gnews.ui.main.home
 
+import android.annotation.SuppressLint
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,22 +17,12 @@ import com.squareup.picasso.Picasso
 
 class ArticleAdapter(
     private val onViewContent: (String) -> Unit,
-    private val onMarkAsFavourite: (String) -> Unit
+    private val onFavouriteMarkChanged: (String, Boolean) -> Unit
 ) :
     RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 
-    private val articlesDiffUtil by lazy {
-        object : DiffUtil.ItemCallback<Article>() {
-            override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
-                return oldItem.title == newItem.title
-            }
-
-            override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
-    private val differ = AsyncListDiffer(this, articlesDiffUtil)
+    private var articles: List<Article> = listOf()
+    private var updatedPosition: Int? = null
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ListItemArticleBinding.bind(view)
@@ -55,11 +46,14 @@ class ArticleAdapter(
                     }
                     setImageResource(iconRes)
                     setOnDebouncedClickListener {
-                        onMarkAsFavourite.invoke(differ.currentList[layoutPosition].title)
+                        articles[layoutPosition].run {
+                            updatedPosition = layoutPosition
+                            onFavouriteMarkChanged.invoke(title, !isFavourite)
+                        }
                     }
                 }
                 layContainer.setOnDebouncedClickListener {
-                    onViewContent.invoke(differ.currentList[layoutPosition].title)
+                    onViewContent.invoke(articles[layoutPosition].title)
                 }
             }
         }
@@ -71,13 +65,17 @@ class ArticleAdapter(
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = differ.currentList.size
+    override fun getItemCount(): Int = articles.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setListItems(articles: List<Article>) {
-        differ.submitList(articles)
+        this.articles = articles
+        updatedPosition?.let {
+            notifyItemChanged(it)
+        } ?: notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(differ.currentList[position])
+        holder.bind(articles[position])
     }
 }

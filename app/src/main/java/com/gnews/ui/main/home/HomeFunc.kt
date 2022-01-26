@@ -6,7 +6,15 @@ import com.gnews.ui.BaseEffect
 import com.gnews.ui.BaseEvent
 import com.gnews.ui.BaseState
 
-data class State(var articles: List<Article> = listOf()) : BaseState()
+data class State(
+    var articlesFromRemote: List<Article> = listOf(),
+    var savedArticlesTitles: List<String> = listOf()
+) : BaseState() {
+    val articles: List<Article>
+        get() = articlesFromRemote.onEach { item ->
+            item.isFavourite = savedArticlesTitles.contains(item.title)
+        }
+}
 
 sealed class Effect : BaseEffect() {
     sealed class NavigateTo : Effect()
@@ -19,5 +27,5 @@ sealed class Effect : BaseEffect() {
 sealed class Event : BaseEvent() {
     object Update : Event()
     data class ViewDetails(val title: String) : Event()
-    data class MarkAsFavourite(val title: String) : Event()
+    data class MarkAsFavourite(val title: String, val isSelected: Boolean) : Event()
 }
